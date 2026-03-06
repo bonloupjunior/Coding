@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AliGilles Food Planner</title>
+    <title>AliGilles' Awesome Numnums Planner</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: linear-gradient(160deg, #dce8dc 0%, #c8d8c8 50%, #bccfbe 100%);
+            background: linear-gradient(160deg, #f0f2f5 0%, #e4e8ef 50%, #d8dfe8 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -21,18 +21,18 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-radius: 18px;
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12), 0 1px 0 rgba(255,255,255,0.6) inset;
+            box-shadow: 0 8px 40px rgba(0, 78, 140, 0.10), 0 1px 0 rgba(255,255,255,0.6) inset;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(0, 120, 212, 0.12);
         }
 
         /* ── Header ── */
         .header {
-            background: linear-gradient(135deg, #1c2e1c 0%, #2e4d2e 100%);
+            background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%);
             color: white;
             padding: 11px 24px;
             text-align: center;
@@ -42,7 +42,47 @@
             font-size: 1.15em;
             font-weight: 600;
             letter-spacing: 0.3px;
-            opacity: 0.95;
+            opacity: 0.97;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .header-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255,255,255,0.40);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .header-logo:hover {
+            transform: scale(1.08);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+        }
+
+        /* ── Logo preview tooltip ── */
+        .logo-preview {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+            border: 3px solid rgba(255,255,255,0.85);
+            pointer-events: none;
+        }
+
+        .logo-preview img {
+            display: block;
+            width: 280px;
+            height: 280px;
+            object-fit: cover;
         }
 
         /* ── Two-column page layout ── */
@@ -62,30 +102,29 @@
         .shopping-panel {
             width: 255px;
             flex-shrink: 0;
-            background: rgba(240, 248, 240, 0.75);
+            background: rgba(239, 246, 252, 0.80);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-left: 1px solid rgba(100, 150, 100, 0.2);
+            border-left: 1px solid rgba(0, 120, 212, 0.15);
             padding: 16px 16px;
             display: flex;
             flex-direction: column;
         }
 
         .shopping-panel h3 {
-            font-size: 0.92em;
+            font-size: 0.78em;
             font-weight: 600;
-            color: #2e4d2e;
+            color: #005a9e;
             margin-bottom: 10px;
             padding-bottom: 8px;
-            border-bottom: 1px solid rgba(80, 130, 80, 0.2);
+            border-bottom: 1px solid rgba(0, 120, 212, 0.18);
             flex-shrink: 0;
             letter-spacing: 0.2px;
             text-transform: uppercase;
-            font-size: 0.78em;
         }
 
         .shopping-placeholder {
-            color: #94a694;
+            color: #8a9aaa;
             font-size: 0.82em;
             font-style: italic;
             line-height: 1.5;
@@ -102,7 +141,7 @@
 
         .shopping-list li {
             font-size: 0.81em;
-            color: #3a4a3a;
+            color: #323130;
             line-height: 1.4;
             display: flex;
             gap: 5px;
@@ -117,22 +156,13 @@
 
         /* ── Filter bar ── */
         .form-section {
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.65);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             border-radius: 12px;
             margin: -20px -24px 20px -24px;
             padding: 14px 24px;
-            border-bottom: 1px solid rgba(0,0,0,0.06);
-        }
-
-        .form-section h2 {
-            font-size: 0.78em;
-            color: #556655;
-            margin-bottom: 10px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(0, 120, 212, 0.08);
         }
 
         .form-grid {
@@ -148,10 +178,16 @@
 
         .form-group > label {
             font-size: 0.78em;
-            color: #6a7a6a;
+            color: #605e5c;
             margin-bottom: 4px;
             font-weight: 500;
             letter-spacing: 0.3px;
+        }
+
+        label[for="search"] {
+            font-size: 1em;
+            font-weight: 600;
+            color: #323130;
         }
 
         .form-group input,
@@ -164,20 +200,20 @@
             font-family: inherit;
             height: 34px;
             flex-shrink: 0;
-            background: rgba(255, 255, 255, 0.8);
-            color: #2a3a2a;
+            background: rgba(255, 255, 255, 0.85);
+            color: #323130;
         }
 
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #4a7a4a;
-            box-shadow: 0 0 0 3px rgba(74, 122, 74, 0.12);
+            border-color: #0078d4;
+            box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.14);
             background: white;
         }
 
         .form-group input::placeholder {
-            color: #aab4aa;
+            color: #a8b3bf;
         }
 
         .radio-group {
@@ -192,12 +228,12 @@
             align-items: center;
             gap: 6px;
             font-size: 0.86em;
-            color: #3a4a3a;
+            color: #323130;
             cursor: pointer;
         }
 
         .radio-label input[type="radio"] {
-            accent-color: #4a7a4a;
+            accent-color: #0078d4;
             width: 13px;
             height: 13px;
             flex-shrink: 0;
@@ -214,21 +250,21 @@
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            background: linear-gradient(135deg, #3a6b3a 0%, #2e5530 100%);
+            background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%);
             color: white;
             text-decoration: none;
             padding: 7px 16px;
             border-radius: 20px;
             font-size: 0.85em;
             font-weight: 600;
-            box-shadow: 0 2px 8px rgba(46, 85, 48, 0.25);
+            box-shadow: 0 2px 8px rgba(0, 78, 140, 0.25);
             transition: all 0.2s ease;
             letter-spacing: 0.2px;
         }
 
         .menu-btn:hover {
-            background: linear-gradient(135deg, #456e45 0%, #3a6b3a 100%);
-            box-shadow: 0 4px 14px rgba(46, 85, 48, 0.35);
+            background: linear-gradient(135deg, #106ebe 0%, #0078d4 100%);
+            box-shadow: 0 4px 14px rgba(0, 78, 140, 0.35);
             transform: translateY(-1px);
         }
 
@@ -236,20 +272,38 @@
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            background: rgba(0, 0, 0, 0.06);
-            color: #6a7a6a;
+            background: rgba(0, 0, 0, 0.05);
+            color: #605e5c;
             text-decoration: none;
             padding: 7px 14px;
             border-radius: 20px;
             font-size: 0.85em;
             font-weight: 500;
-            border: 1px solid rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.10);
             transition: all 0.2s ease;
         }
 
         .clear-btn:hover {
-            background: rgba(0, 0, 0, 0.1);
-            color: #2a3a2a;
+            background: rgba(0, 0, 0, 0.09);
+            color: #323130;
+        }
+
+        .qotd {
+            margin-top: 10px;
+            font-size: 0.78em;
+            color: #8a9aaa;
+            font-style: italic;
+            line-height: 1.45;
+            max-width: 420px;
+        }
+
+        .qotd cite {
+            display: block;
+            font-style: normal;
+            font-weight: 500;
+            color: #a8b3bf;
+            margin-top: 2px;
+            font-size: 0.92em;
         }
 
         /* ── Results ── */
@@ -261,7 +315,7 @@
 
         .results-section h2 {
             font-size: 1em;
-            color: #2a3a2a;
+            color: #323130;
             margin-bottom: 10px;
             font-weight: 600;
         }
@@ -280,9 +334,9 @@
         }
 
         .message.info {
-            background: rgba(50, 80, 180, 0.07);
-            color: #336;
-            border-left: 3px solid #448;
+            background: rgba(0, 120, 212, 0.07);
+            color: #005a9e;
+            border-left: 3px solid #0078d4;
         }
 
         .recipe-list {
@@ -292,23 +346,23 @@
         .recipe-item {
             padding: 9px 13px;
             margin-bottom: 5px;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.75);
             border-radius: 8px;
             border: 1px solid rgba(0, 0, 0, 0.06);
-            border-left: 3px solid rgba(74, 122, 74, 0.45);
+            border-left: 3px solid rgba(0, 120, 212, 0.35);
             transition: all 0.2s ease;
         }
 
         .recipe-item:hover {
-            background: rgba(255, 255, 255, 0.95);
-            border-left-color: #4a7a4a;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            background: rgba(255, 255, 255, 0.98);
+            border-left-color: #0078d4;
+            box-shadow: 0 2px 10px rgba(0, 78, 140, 0.09);
             transform: translateX(3px);
         }
 
         .recipe-name {
             display: inline-block;
-            color: #2a5a2a;
+            color: #0078d4;
             text-decoration: none;
             font-weight: 600;
             font-size: 0.93em;
@@ -317,26 +371,26 @@
         }
 
         .recipe-name:hover {
-            color: #1a3d1a;
+            color: #005a9e;
             text-decoration: underline;
-            text-decoration-color: rgba(42, 90, 42, 0.4);
+            text-decoration-color: rgba(0, 120, 212, 0.4);
         }
 
         .recipe-item.in-menu {
-            border-left-color: #5a8a3a;
-            background: rgba(240, 248, 235, 0.75);
+            border-left-color: #0078d4;
+            background: rgba(239, 246, 252, 0.80);
         }
 
         .recipe-attrs {
-            color: #7a8a7a;
+            color: #8a9aaa;
             font-size: 0.78em;
             margin-top: 2px;
         }
 
         .recipe-attrs small {
             display: inline-block;
-            background: rgba(80, 120, 80, 0.09);
-            color: #4a6a4a;
+            background: rgba(0, 120, 212, 0.08);
+            color: #005a9e;
             padding: 1px 6px;
             border-radius: 4px;
             margin-right: 3px;
@@ -346,7 +400,7 @@
         .empty-state {
             text-align: center;
             padding: 36px 20px;
-            color: #8a9a8a;
+            color: #8a9aaa;
         }
 
         .empty-state p {
@@ -365,7 +419,7 @@
         }
 
         .page-btn {
-            background: linear-gradient(135deg, #3a6b3a 0%, #2e5530 100%);
+            background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%);
             color: white;
             text-decoration: none;
             padding: 6px 16px;
@@ -373,12 +427,12 @@
             font-size: 0.83em;
             font-weight: 600;
             transition: all 0.2s ease;
-            box-shadow: 0 1px 4px rgba(46, 85, 48, 0.2);
+            box-shadow: 0 1px 4px rgba(0, 78, 140, 0.20);
         }
 
         .page-btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 3px 10px rgba(46, 85, 48, 0.3);
+            box-shadow: 0 3px 10px rgba(0, 78, 140, 0.28);
         }
 
         .page-btn.disabled {
@@ -393,8 +447,19 @@
         }
 
         .page-info {
-            color: #7a8a7a;
+            color: #605e5c;
             font-size: 0.88em;
+        }
+
+        .recipe-diet-icon {
+            margin-right: 4px;
+            flex-shrink: 0;
+        }
+
+        .recipe-source-icon {
+            margin-left: 5px;
+            flex-shrink: 0;
+            opacity: 0.75;
         }
 
         /* ── Recipe title row ── */
@@ -428,9 +493,9 @@
             background: rgba(255, 255, 255, 0.97);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 120, 212, 0.12);
             border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 30px rgba(0, 78, 140, 0.15);
             padding: 14px 16px;
             min-width: 220px;
             font-size: 0.86em;
@@ -439,7 +504,7 @@
         .schedule-popover h4 {
             margin: 0 0 10px 0;
             font-size: 0.88em;
-            color: #2e4d2e;
+            color: #005a9e;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.3px;
@@ -448,7 +513,7 @@
         .schedule-popover label {
             display: block;
             font-size: 0.8em;
-            color: #6a7a6a;
+            color: #605e5c;
             margin-bottom: 3px;
             margin-top: 8px;
         }
@@ -462,7 +527,7 @@
             font-size: 0.9em;
             font-family: inherit;
             background: rgba(255,255,255,0.9);
-            color: #2a3a2a;
+            color: #323130;
         }
 
         .schedule-popover .pop-actions {
@@ -474,7 +539,7 @@
         .schedule-popover .pop-confirm {
             flex: 1;
             padding: 6px 10px;
-            background: linear-gradient(135deg, #3a6b3a 0%, #2e5530 100%);
+            background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%);
             color: white;
             border: none;
             border-radius: 16px;
@@ -490,7 +555,7 @@
         .schedule-popover .pop-cancel {
             padding: 6px 10px;
             background: rgba(0,0,0,0.06);
-            color: #6a7a6a;
+            color: #605e5c;
             border: 1px solid rgba(0,0,0,0.1);
             border-radius: 16px;
             font-size: 0.85em;
@@ -504,7 +569,7 @@
             min-height: 1em;
         }
 
-        .schedule-popover .pop-status.ok { color: #3a6b3a; }
+        .schedule-popover .pop-status.ok { color: #107c10; }
         .schedule-popover .pop-status.err { color: #a33; }
 
         /* ── Ingredient tooltip ── */
@@ -512,12 +577,12 @@
             display: none;
             position: fixed;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.94);
+            background: rgba(255, 255, 255, 0.96);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 120, 212, 0.12);
             border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.14);
+            box-shadow: 0 8px 30px rgba(0, 78, 140, 0.14);
             padding: 12px 14px;
             max-width: 300px;
             min-width: 190px;
@@ -528,9 +593,9 @@
         .ingredient-tooltip h4 {
             margin: 0 0 7px 0;
             font-size: 0.88em;
-            color: #2e4d2e;
+            color: #005a9e;
             font-weight: 600;
-            border-bottom: 1px solid rgba(0,0,0,0.08);
+            border-bottom: 1px solid rgba(0, 120, 212, 0.10);
             padding-bottom: 5px;
             text-transform: uppercase;
             letter-spacing: 0.3px;
@@ -539,18 +604,18 @@
         .ingredient-tooltip ul {
             margin: 0;
             padding: 0 0 0 14px;
-            color: #3a4a3a;
+            color: #323130;
             line-height: 1.7;
         }
 
         .ingredient-tooltip .tip-loading {
-            color: #9aaa9a;
+            color: #8a9aaa;
             font-style: italic;
         }
 
         @media (max-width: 900px) {
             .page-layout { flex-direction: column; }
-            .shopping-panel { width: 100%; border-left: none; border-top: 1px solid rgba(100, 150, 100, 0.2); }
+            .shopping-panel { width: 100%; border-left: none; border-top: 1px solid rgba(0, 120, 212, 0.15); }
             .form-grid { grid-template-columns: 1fr; }
             .main-column { padding: 16px; }
             .form-section { margin: -16px -16px 16px -16px; border-radius: 0; }
@@ -560,13 +625,17 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1>🍽️ AliGilles Food Planner</h1>
+        <h1><img src="/static/logo_circle.png" class="header-logo" id="header-logo" alt="AliGilles"> AliGilles' Awesome Numnums Planner</h1>
+    </div>
+
+    <!-- Logo full-photo preview -->
+    <div class="logo-preview" id="logo-preview">
+        <img src="/static/logo.jpg" alt="Full photo">
     </div>
 
     <div class="page-layout">
         <div class="main-column">
             <div class="form-section">
-                <h2>Filters</h2>
                 <form method="get" action="/">
                     <div class="form-grid">
                         <div class="form-group">
@@ -576,6 +645,7 @@
                                 <a href="/?suggest=1" class="menu-btn" id="menu-btn">📋 Menu</a>
                                 <a href="/" class="clear-btn">✕ Clear</a>
                             </div>
+                            <div class="qotd" id="qotd"></div>
                         </div>
                         <div class="form-group" style="padding-left: 20px;">
                             <label>Diet</label>
@@ -619,9 +689,11 @@
                         data-recipe-source="{{ r.source or 'bbcgoodfood' }}">
                         <div class="recipe-content">
                             <div class="recipe-title-row">
-                                <a href="{{ r.url }}" target="_blank" class="recipe-name">{{ r.diet_icon }} {{ r.name }} {{ r.source_icon|safe }}</a>
+                                <span class="recipe-diet-icon">{{ r.diet_icon }}</span><a href="{{ r.url }}" target="_blank" class="recipe-name">{{ r.name }}</a><span class="recipe-source-icon">{{ r.source_icon|safe }}</span>
                                 {% if (r.source or 'bbcgoodfood') == 'plantoeat' %}
                                 <button class="schedule-btn" data-rid="{{ r.id }}" title="Schedule in Plan to Eat">📅</button>
+                                {% else %}
+                                <button class="schedule-btn" data-name="{{ r.name }}" data-url="{{ r.url }}" title="Schedule in Plan to Eat">📅</button>
                                 {% endif %}
                             </div>
                             {% if r.attributes %}
@@ -699,6 +771,64 @@
 </div>
 
 <script>
+// ── Quote of the Day ──
+(function() {
+    const quotes = [
+        ["One cannot think well, love well, sleep well, if one has not dined well.", "Virginia Woolf"],
+        ["Cooking is like love. It should be entered into with abandon or not at all.", "Harriet Van Horne"],
+        ["Tell me what you eat and I will tell you what you are.", "Jean Anthelme Brillat-Savarin"],
+        ["The secret ingredient is always love. But it's mostly butter.", "Anonymous"],
+        ["People who love to eat are always the best people.", "Julia Child"],
+        ["First we eat, then we do everything else.", "M.F.K. Fisher"],
+        ["Food is not just eating energy. It's an experience.", "Guy Fieri"],
+        ["The discovery of a new dish does more for the happiness of the human race than the discovery of a star.", "Brillat-Savarin"],
+        ["Life is uncertain. Eat dessert first.", "Ernestine Ulmer"],
+        ["Cooking is an art, but all art requires knowing something about the techniques and materials.", "Nathan Myhrvold"],
+        ["A recipe has no soul. You as the cook must bring soul to the recipe.", "Thomas Keller"],
+        ["The only time to eat diet food is while you're waiting for the steak to cook.", "Julia Child"],
+        ["Good food is the foundation of genuine happiness.", "Auguste Escoffier"],
+        ["Food is memories.", "José Andrés"],
+        ["Everything in moderation, including moderation.", "Julia Child"],
+        ["Cooking is at once child's play and adult joy.", "Craig Claiborne"],
+        ["You don't have to cook fancy or complicated masterpieces — just good food from fresh ingredients.", "Julia Child"],
+        ["In cooking, as in all the arts, simplicity is the sign of perfection.", "Curnonsky"],
+        ["A good meal ought to begin with hunger.", "French proverb"],
+        ["The belly rules the mind.", "Spanish proverb"],
+    ];
+    const day = Math.floor(Date.now() / 86400000); // days since epoch
+    const [text, author] = quotes[day % quotes.length];
+    const el = document.getElementById('qotd');
+    if (el) el.innerHTML = `"${text}" <cite>— ${author}</cite>`;
+})();
+
+// ── Header logo hover: show full photo ──
+(function() {
+    const logo = document.getElementById('header-logo');
+    const preview = document.getElementById('logo-preview');
+
+    logo.addEventListener('mouseenter', () => {
+        preview.style.display = 'block';
+        positionPreview();
+    });
+
+    logo.addEventListener('mousemove', positionPreview);
+
+    logo.addEventListener('mouseleave', () => {
+        preview.style.display = 'none';
+    });
+
+    function positionPreview() {
+        const rect = logo.getBoundingClientRect();
+        const pw = 280, ph = 280, margin = 10;
+        let left = rect.right + margin;
+        let top = rect.bottom + margin;
+        if (left + pw > window.innerWidth - margin) left = rect.left - pw - margin;
+        if (top + ph > window.innerHeight - margin) top = rect.top - ph - margin;
+        preview.style.left = left + 'px';
+        preview.style.top = top + 'px';
+    }
+})();
+
 (function() {
     const params = new URLSearchParams(window.location.search);
     const searchEl = document.getElementById('search');
@@ -761,12 +891,13 @@ function positionTooltip(x, y) {
     tooltip.style.top = top + 'px';
 }
 
-document.querySelectorAll('.recipe-item').forEach(item => {
+document.querySelectorAll('.recipe-name').forEach(link => {
+    const item = link.closest('.recipe-item');
     const id = item.dataset.recipeId;
     const url = item.dataset.recipeUrl;
     const source = item.dataset.recipeSource;
 
-    item.addEventListener('mouseenter', e => {
+    link.addEventListener('mouseenter', e => {
         clearTimeout(hideTimer);
         if (cache[id] !== undefined) {
             showTooltip(e.clientX, e.clientY, renderIngredients(cache[id]));
@@ -782,9 +913,9 @@ document.querySelectorAll('.recipe-item').forEach(item => {
             .catch(() => { cache[id] = []; tooltipBody.innerHTML = '<span class="tip-loading">Unavailable</span>'; });
     });
 
-    item.addEventListener('mousemove', e => positionTooltip(e.clientX, e.clientY));
+    link.addEventListener('mousemove', e => positionTooltip(e.clientX, e.clientY));
 
-    item.addEventListener('mouseleave', () => {
+    link.addEventListener('mouseleave', () => {
         hideTimer = setTimeout(() => { tooltip.style.display = 'none'; }, 120);
     });
 });
@@ -802,6 +933,8 @@ const popConfirm = document.getElementById('pop-confirm');
 const popCancel = document.getElementById('pop-cancel');
 const popStatus = document.getElementById('pop-status');
 let currentRid = null;
+let currentName = null;
+let currentUrl = null;
 
 // Default date to tomorrow
 function defaultDate() {
@@ -811,7 +944,9 @@ function defaultDate() {
 }
 
 function openPopover(btn) {
-    currentRid = btn.dataset.rid;
+    currentRid  = btn.dataset.rid  || null;
+    currentName = btn.dataset.name || null;
+    currentUrl  = btn.dataset.url  || null;
     popDate.value = defaultDate();
     popSection.value = 'dinner';
     popStatus.textContent = '';
@@ -831,7 +966,7 @@ function openPopover(btn) {
 
 function closePopover() {
     popover.style.display = 'none';
-    currentRid = null;
+    currentRid = currentName = currentUrl = null;
 }
 
 document.querySelectorAll('.schedule-btn').forEach(btn => {
@@ -855,15 +990,23 @@ document.addEventListener('click', e => {
 });
 
 popConfirm.addEventListener('click', () => {
-    if (!currentRid || !popDate.value) return;
+    if ((!currentRid && !currentName) || !popDate.value) return;
     popConfirm.disabled = true;
     popConfirm.textContent = 'Scheduling…';
     popStatus.textContent = '';
 
+    const payload = {date: popDate.value, section: popSection.value};
+    if (currentRid) {
+        payload.rid = currentRid;
+    } else {
+        payload.name = currentName;
+        payload.url  = currentUrl;
+    }
+
     fetch('/api/schedule_to_pte', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({rid: currentRid, date: popDate.value, section: popSection.value})
+        body: JSON.stringify(payload)
     })
     .then(r => r.json())
     .then(data => {

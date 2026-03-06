@@ -25,3 +25,14 @@
 
 ## Diet categories
 vegetarian 🥦 · fish 🐟 · white_meat 🍗 · red_meat 🥩 · dessert 🍰
+
+## UI / Styling
+- Color palette: Outlook blue (`#0078d4` primary, `#005a9e` dark, `#323130` text, `#605e5c` secondary text)
+- All CSS is inline in `templates/plan.html` — no external stylesheet
+- Logo: `static/logo.jpg` (original), `static/logo_circle.png` (72×72 circular crop, center cx=481 cy=337 r=286)
+
+## PlanToEat API (authenticated via `plantoeat_cookies.json`)
+- Schedule recipe: `POST /planner/create` — body: `rid=<id>&date=YYYY-MM-DD&section=<breakfast|lunch|dinner>`
+- Create stub recipe: `GET /recipes/new` → parse `data-recipe-id` → `POST /recipes/update/<id>` with `recipe[title]`, `recipe[source]`
+- Use `curl_cffi` Session (`impersonate='chrome120'`) — standard `requests` gets blocked
+- Cookie file path: `plantoeat_cookies.json` (gitignored) — must exist for scheduling to work
