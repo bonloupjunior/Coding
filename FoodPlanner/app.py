@@ -560,31 +560,65 @@ def menu_toggle():
     return jsonify({"in_menu": in_menu, "count": len(plan)})
 
 
+def _pte_session():
+    """curl_cffi session with PTE cookies loaded."""
+    session = cf_requests.Session(impersonate="chrome120")
+    if os.path.exists(PLANTOEAT_COOKIES_FILE):
+        with open(PLANTOEAT_COOKIES_FILE) as f:
+            cookies = json.load(f)
+        for c in cookies:
+            if "plantoeat.com" in c.get("domain", ""):
+                session.cookies.set(c["name"], c["value"], domain=c["domain"].lstrip("."))
+    return session
+
+
+def _pte_create_recipe(session, name, source_url):
+    """Create a minimal PTE recipe and return its rid, or raise on failure."""
+    # GET /recipes/new – PTE creates a draft and embeds its id in the page
+    r = session.get("https://app.plantoeat.com/recipes/new", timeout=15)
+    match = re.search(r'data-recipe-id="(\d+)"', r.text)
+    if not match:
+        raise RuntimeError("Could not find recipe id in /recipes/new response")
+    rid = match.group(1)
+    # Fill in the recipe title and source URL
+    session.post(
+        f"https://app.plantoeat.com/recipes/update/{rid}",
+        data={
+            "recipe[title]": name,
+            "recipe[source]": source_url,
+            "recipe[servings]": "1",
+        },
+        timeout=15,
+    )
+    return rid
+
+
 @app.route("/api/schedule_to_pte", methods=["POST"])
 def schedule_to_pte():
-    data = request.get_json()
-    rid = str((data or {}).get("rid", "")).strip()
-    date = str((data or {}).get("date", "")).strip()
-    section = str((data or {}).get("section", "dinner")).strip()
+    data = request.get_json() or {}
+    rid      = str(data.get("rid", "")).strip()
+    name     = str(data.get("name", "")).strip()
+    url      = str(data.get("url", "")).strip()
+    date     = str(data.get("date", "")).strip()
+    section  = str(data.get("section", "dinner")).strip()
 
-    if not rid or not date:
-        return jsonify({"error": "Missing rid or date"}), 400
+    if not date:
+        return jsonify({"error": "Missing date"}), 400
+    if not rid and not (name and url):
+        return jsonify({"error": "Provide either rid (PTE) or name+url (external)"}), 400
 
     try:
-        session = cf_requests.Session(impersonate="chrome120")
-        if os.path.exists(PLANTOEAT_COOKIES_FILE):
-            with open(PLANTOEAT_COOKIES_FILE) as f:
-                cookies = json.load(f)
-            for c in cookies:
-                if "plantoeat.com" in c.get("domain", ""):
-                    session.cookies.set(c["name"], c["value"], domain=c["domain"].lstrip("."))
+        session = _pte_session()
+        if not rid:
+            # BBC GF / EYB: create a stub recipe in PTE first
+            rid = _pte_create_recipe(session, name, url)
         resp = session.post(
             "https://app.plantoeat.com/planner/create",
             data={"rid": rid, "date": date, "section": section},
             timeout=15,
         )
         if resp.status_code == 200:
-            return jsonify({"ok": True})
+            return jsonify({"ok": True, "rid": rid})
         return jsonify({"error": f"PlanToEat returned {resp.status_code}"}), 502
     except Exception as e:
         return jsonify({"error": str(e)}), 500
