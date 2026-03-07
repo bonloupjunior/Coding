@@ -616,9 +616,41 @@
         @media (max-width: 900px) {
             .page-layout { flex-direction: column; }
             .shopping-panel { width: 100%; border-left: none; border-top: 1px solid rgba(0, 120, 212, 0.15); }
-            .form-grid { grid-template-columns: 1fr; }
+            /* Search spans full width; Diet + Source sit side by side */
+            .form-grid { grid-template-columns: 1fr 1fr; }
+            .form-grid .form-group:first-child { grid-column: 1 / -1; }
             .main-column { padding: 16px; }
             .form-section { margin: -16px -16px 16px -16px; border-radius: 0; }
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 6px; }
+            .container { border-radius: 10px; }
+            .header { padding: 10px 14px; }
+            .header h1 { font-size: 0.88em; gap: 8px; flex-wrap: wrap; }
+            .main-column { padding: 12px; }
+            .form-section { margin: -12px -12px 14px -12px; }
+            /* Larger touch targets */
+            .radio-label { min-height: 34px; }
+            .menu-btn, .clear-btn { padding: 9px 16px; }
+            .qotd { max-width: none; }
+            /* No slide-in on touch – it's jarring */
+            .recipe-item:hover { transform: none; }
+            /* Popover: center it regardless of JS-computed left */
+            .schedule-popover {
+                left: 50% !important;
+                transform: translateX(-50%);
+                min-width: 280px;
+                max-width: calc(100vw - 24px);
+            }
+            .page-btn { padding: 8px 18px; }
+        }
+
+        /* Disable hover-only features on touch devices */
+        @media (hover: none) {
+            .logo-preview { display: none !important; }
+            .header-logo { cursor: default; }
+            .ingredient-tooltip { display: none !important; }
         }
     </style>
 </head>
@@ -647,7 +679,7 @@
                             </div>
                             <div class="qotd" id="qotd"></div>
                         </div>
-                        <div class="form-group" style="padding-left: 20px;">
+                        <div class="form-group">
                             <label>Diet</label>
                             <div class="radio-group">
                                 <label class="radio-label"><input type="radio" name="diet" value=""> Any</label>
@@ -861,8 +893,10 @@
         });
     });
 
+    const isTouchDevice = window.matchMedia('(hover: none)').matches;
     let debounceTimer = null;
     document.getElementById('search').addEventListener('input', function() {
+        if (isTouchDevice) return; // mobile: submit on Enter only (native form behaviour)
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => this.closest('form').submit(), 400);
     });
