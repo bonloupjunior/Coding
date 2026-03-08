@@ -197,6 +197,13 @@ def build_shopping_list(results):
     return items
 
 
+def parse_rating(recipe):
+    """Extract numeric rating float from rating text, e.g. 'A star rating of 4.15 out of 5.' -> 4.15"""
+    rating_text = recipe.get("rating") or ""
+    m = re.search(r"(\d+(?:\.\d+)?)\s+out of", rating_text)
+    return float(m.group(1)) if m else None
+
+
 def classify_diet(recipe):
     """Return 'dessert', 'vegetarian', 'fish', 'red_meat', 'white_meat', or None."""
     attrs = " ".join(recipe.get("attributes", [])).lower()
@@ -453,6 +460,7 @@ def index():
             r["diet_type"] = classify_diet(r)
             r["diet_icon"] = DIET_ICONS.get(r["diet_type"], "")
             r["source_icon"] = SOURCE_ICONS.get(r.get("source", "bbcgoodfood"), SOURCE_ICONS["bbcgoodfood"])
+            r["rating_value"] = parse_rating(r)
             r["in_menu"] = r["id"] in meal_plan_ids
             results.append(r)
         total = len(results)
@@ -520,6 +528,7 @@ def index():
         r["diet_type"] = classify_diet(r)
         r["diet_icon"] = DIET_ICONS.get(r["diet_type"], "")
         r["source_icon"] = SOURCE_ICONS.get(r.get("source", "bbcgoodfood"), SOURCE_ICONS["bbcgoodfood"])
+        r["rating_value"] = parse_rating(r)
         r["in_menu"] = r["id"] in meal_plan_ids
 
     return render_template("plan.html", results=results, page=page,
@@ -539,6 +548,7 @@ def menu():
             r["diet_type"] = classify_diet(r)
             r["diet_icon"] = DIET_ICONS.get(r["diet_type"], "")
             r["source_icon"] = SOURCE_ICONS.get(r.get("source", "bbcgoodfood"), SOURCE_ICONS["bbcgoodfood"])
+            r["rating_value"] = parse_rating(r)
             plan_recipes.append(r)
     return render_template("menu.html", recipes=plan_recipes)
 
