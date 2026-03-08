@@ -397,7 +397,12 @@
             margin-top: 2px;
         }
 
-        .empty-state {
+        .recipe-rating {
+            background: rgba(184, 134, 11, 0.10) !important;
+            color: #b8860b !important;
+        }
+
+.empty-state {
             text-align: center;
             padding: 36px 20px;
             color: #8a9aaa;
@@ -728,11 +733,14 @@
                                 <button class="schedule-btn" data-name="{{ r.name }}" data-url="{{ r.url }}" title="Schedule in Plan to Eat">📅</button>
                                 {% endif %}
                             </div>
-                            {% if r.attributes %}
+                            {% if r.attributes or r.rating_value %}
                             <div class="recipe-attrs">
                                 {% for attr in r.attributes %}
                                 <small>{{ attr }}</small>
                                 {% endfor %}
+                                {% if r.rating_value %}
+                                <small class="recipe-rating" title="{{ r.rating }}">&#9733; {{ '%.1f'|format(r.rating_value) }}</small>
+                                {% endif %}
                             </div>
                             {% endif %}
                         </div>
