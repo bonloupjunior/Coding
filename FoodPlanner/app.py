@@ -11,6 +11,11 @@ from flask import Flask, jsonify, render_template, request
 
 app = Flask(__name__)
 
+@app.context_processor
+def inject_visitor_ip():
+    ip = request.headers.get("X-Forwarded-For", request.remote_addr)
+    return {"visitor_ip": ip.split(",")[0].strip()}
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 RECIPES_FILE = os.path.join(BASE_DIR, "saved_recipes.json")
 PLANTOEAT_COOKIES_FILE = os.path.join(BASE_DIR, "plantoeat_cookies.json")
