@@ -11,11 +11,12 @@ from flask import Flask, jsonify, render_template, request
 
 app = Flask(__name__)
 
-RECIPES_FILE = "/Users/gilles/Coding/FoodPlanner/saved_recipes.json"
-PLANTOEAT_COOKIES_FILE = "/Users/gilles/Coding/FoodPlanner/plantoeat_cookies.json"
-EATYOURBOOKS_COOKIES_FILE = "/Users/gilles/Coding/FoodPlanner/eatyourbooks_cookies.json"
-INGREDIENTS_CACHE_FILE = "/Users/gilles/Coding/FoodPlanner/ingredients_cache.json"
-MEAL_PLAN_FILE = "/Users/gilles/Coding/FoodPlanner/meal_plan.json"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+RECIPES_FILE = os.path.join(BASE_DIR, "saved_recipes.json")
+PLANTOEAT_COOKIES_FILE = os.path.join(BASE_DIR, "plantoeat_cookies.json")
+EATYOURBOOKS_COOKIES_FILE = os.path.join(BASE_DIR, "eatyourbooks_cookies.json")
+INGREDIENTS_CACHE_FILE = os.path.join(BASE_DIR, "ingredients_cache.json")
+MEAL_PLAN_FILE = os.path.join(BASE_DIR, "meal_plan.json")
 PAGE_SIZE = 10
 
 FISH_KEYWORDS = {
@@ -633,6 +634,5 @@ def schedule_to_pte():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True, port=5050)
+    app.run(host="0.0.0.0", debug=False, port=int(os.environ.get("PORT", 5050)))
