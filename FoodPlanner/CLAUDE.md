@@ -31,6 +31,13 @@ vegetarian 🥦 · fish 🐟 · white_meat 🍗 · red_meat 🥩 · dessert 🍰
 - All CSS is inline in `templates/plan.html` — no external stylesheet
 - Logo: `static/logo.jpg` (original), `static/logo_circle.png` (72×72 circular crop, center cx=481 cy=337 r=286)
 
+## Render Deployment
+- Service: `srv-d6nfnkv5gffc739bsr10` — https://coding-dbx0.onrender.com
+- Control via REST API: `curl -H "Authorization: Bearer $RENDER_API_KEY" https://api.render.com/v1/...`
+- Trigger deploy: `POST /v1/services/{id}/deploys` with `{"clearCache":"do_not_clear"}`
+- Poll status: `GET /v1/services/{id}/deploys/{deployId}` — states: queued → build_in_progress → update_in_progress → live/failed
+- Python version: pinned to 3.12 via `FoodPlanner/.python-version` (Render defaults to 3.14, breaks greenlet)
+
 ## PlanToEat API (authenticated via `plantoeat_cookies.json`)
 - Schedule recipe: `POST /planner/create` — body: `rid=<id>&date=YYYY-MM-DD&section=<breakfast|lunch|dinner>`
 - Create stub recipe: `GET /recipes/new` → parse `data-recipe-id` → `POST /recipes/update/<id>` with `recipe[title]`, `recipe[source]`
