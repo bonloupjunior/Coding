@@ -29,7 +29,7 @@ vegetarian 🥦 · fish 🐟 · white_meat 🍗 · red_meat 🥩 · dessert 🍰
 ## UI / Styling
 - Color palette: Outlook blue (`#0078d4` primary, `#005a9e` dark, `#323130` text, `#605e5c` secondary text)
 - All CSS is inline in `templates/plan.html` — no external stylesheet
-- Logo: `static/logo.jpg` (original), `static/logo_circle.png` (72×72 circular crop, center cx=481 cy=337 r=286)
+- Logo: `static/crepes.png` (original), `static/crepes_circle.png` (72×72 circular crop, center-square from height)
 
 ## Render Deployment
 - Service: `srv-d6nfnkv5gffc739bsr10` — https://coding-dbx0.onrender.com
